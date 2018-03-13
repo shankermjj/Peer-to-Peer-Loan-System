@@ -11,7 +11,7 @@ import si_artifacts from '../../build/contracts/SI.json'
 // Conference is our usable abstraction, which we'll use through the code below.
 var SI = contract(si_artifacts);
 
-var accounts, account, speaker;
+var accounts;
 var sim;
 
 function getBalance1(address) {
@@ -75,7 +75,7 @@ checkValues: function() {
         SI.deployed().then(function(instance) {
            sim = instance;
 	    console.log(sim);	
-            sim.owner.call().then
+            sim.tenant.call().then
 
 	( function(tent) { console.log(tent); $("input#tentantAddress").val(tent);  }). //})
 	
@@ -88,10 +88,13 @@ Calculate: function(pr,ti,ra)
         var simp;
         SI.deployed().
 
-	then( function(instance) { simp = instance; simp.calculate(pr,ti,url,{from: accounts[0],gas:3000000}). //(}
+	then( function(instance) { simp = instance; simp.calculate(pr,ti,ra,{from: accounts[0],gas:3000000}). //(}
 
-
-	then( function(ipfs) { console.log(ipfs); var msgResult="Successfully Updated!!!";  $("#Result").html(msgResult); });  }). 
+then( function() { console.log(pr); console.log(ti);console.log(ra);console.log( JSON.stringify(SI) ); return simp.Principal.call(); }).
+	then( function(Principal) { console.log(Principal);   return simp.Time.call();  }). //console.log(Time); 
+	then( function(Time) { console.log(Time); return simp.Rate.call();}).
+	then( function(Rate) { console.log(Rate); return simp.Interest.call(); }).
+	then( function(Interest) { console.log(Interest);  $("#i").html(Interest.toNumber()); });  }). 
         catch(function(e) { console.log(e); });
     	
 //}); //})
@@ -130,13 +133,10 @@ window.addEventListener('load', function() {
     $("#caluclate").click(function() {
         var pr = $("#p").val();
 	var ra = $("#r").val();
-	var ti = $("#url").val();
+	var ti = $("#t").val();
         App.Calculate(pr,ti,ra);
     });
 
-    //$("#trans").click(function() {
-    //var val = $("#money").val();
-      //  App.departure(val);
-//});
+    
 
 });
