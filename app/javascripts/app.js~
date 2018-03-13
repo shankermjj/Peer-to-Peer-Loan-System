@@ -14,8 +14,19 @@ var SI = contract(si_artifacts);
 var accounts, account, speaker;
 var sim;
 
-function getBalance(address) {
+function getBalance1(address) {
     return web3.fromWei(web3.eth.getBalance(address).toNumber(), 'ether');
+}
+
+
+
+function getBalance (address) {
+  return new Promise (function (resolve, reject) {
+    web3.eth.getBalance(address, function (error, result) {
+      if (error) { reject(error); } 
+	else { resolve(result);   }
+  })
+})
 }
 
 window.App = { //where to close
@@ -64,7 +75,7 @@ checkValues: function() {
         SI.deployed().then(function(instance) {
            sim = instance;
 	    console.log(sim);	
-            sim.tenant.call().then
+            sim.owner.call().then
 
 	( function(tent) { console.log(tent); $("input#tentantAddress").val(tent);  }). //})
 	
@@ -77,13 +88,10 @@ Calculate: function(pr,ti,ra)
         var simp;
         SI.deployed().
 
-	then( function(instance) { simp = instance; simp.calculate(pr,ti,ra,{from: accounts[0],gas:3000000}). //(}
+	then( function(instance) { simp = instance; simp.calculate(pr,ti,url,{from: accounts[0],gas:3000000}). //(}
 
-then( function() { console.log(pr); console.log(ti);console.log(ra);console.log( JSON.stringify(SI) ); return simp.Principal.call(); }).
-	then( function(Principal) { console.log(Principal);   return simp.Time.call();  }). //console.log(Time); 
-	then( function(Time) { console.log(Time); return simp.Rate.call();}).
-	then( function(Rate) { console.log(Rate); return simp.Interest.call(); }).
-	then( function(Interest) { console.log(Interest);  $("#i").html(Interest.toNumber()); });  }). 
+
+	then( function(ipfs) { console.log(ipfs); var msgResult="Successfully Updated!!!";  $("#i").html(msgResult); });  }). 
         catch(function(e) { console.log(e); });
     	
 //}); //})
@@ -122,7 +130,7 @@ window.addEventListener('load', function() {
     $("#caluclate").click(function() {
         var pr = $("#p").val();
 	var ra = $("#r").val();
-	var ti = $("#t").val();
+	var ti = $("#url").val();
         App.Calculate(pr,ti,ra);
     });
 
