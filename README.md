@@ -1,4 +1,4 @@
-# Blockchain-SimpleInterest-Dapp <br />
+# Blockchain-Loan Payment System-Dapp <br />
 It is Basic Dapp for Blockchain, Creation using Solidity Smartcontract+Truffle+JS using HTML+CSS as front end <br />
 
 # Installation: <br />
